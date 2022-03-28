@@ -3,6 +3,8 @@ package edu.hitsz.application;
 import edu.hitsz.aircraft.*;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
+import edu.hitsz.enemy_factory.EliteEnemyFactory;
+import edu.hitsz.enemy_factory.MobEnemyFactory;
 import edu.hitsz.prop.*;
 
 import javax.swing.*;
@@ -52,7 +54,7 @@ public class Game extends JPanel {
 
 
     public Game() {
-        heroAircraft = new HeroAircraft(
+        heroAircraft = HeroAircraft.getHeroAircraft(
                 Main.WINDOW_WIDTH / 2,
                 Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight() ,
                 0, 0, 100);
@@ -90,7 +92,7 @@ public class Game extends JPanel {
                     // 精英敌机血量为60，能发射子弹
                     switch((int)(Math.random()*5)) {
                         case 0: case 1: case 2: case 3: {
-                            enemyAircrafts.add(new MobEnemy(
+                            enemyAircrafts.add(new MobEnemyFactory().createEnemy(
                                     (int) (Math.random() * (Main.WINDOW_WIDTH - ImageManager.MOB_ENEMY_IMAGE.getWidth()))*1,
                                     (int) (Math.random() * Main.WINDOW_HEIGHT * 0.2)*1,
                                     0,
@@ -100,7 +102,7 @@ public class Game extends JPanel {
                             break;
                         }
                         case 4: {
-                            enemyAircrafts.add(new EliteEnemy(
+                            enemyAircrafts.add(new EliteEnemyFactory().createEnemy(
                                     (int) (Math.random() * (Main.WINDOW_WIDTH - ImageManager.ELITE_ENEMY_IMAGE.getWidth()))*1,
                                     (int) (Math.random() * Main.WINDOW_HEIGHT * 0.2)*1,
                                     0,

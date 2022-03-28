@@ -1,0 +1,52 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+AbstractProp <|-- Bullet
+AbstractProp <|-- Bomb
+AbstractProp <|-- Blood
+
+class AbstractProp {
+    + AbstractProp(int locationX, int locationY,
+     int speedX, int speedY)
+}
+
+class Bullet {
+    + Bullet(int locationX, int locationY,
+     int speedX, int speedY)
+}
+
+class Bomb {
+    + Bomb(int locationX, int locationY,
+     int speedX, int speedY)
+}
+
+class Blood {
+    + Health(int locationX, int locationY,
+     int speedX, int speedY)
+}
+
+PropFactory <|.. BulletFactory
+PropFactory <|.. BombFactory
+PropFactory <|.. BloodFactory
+
+interface PropFactory {
+    + createProp(int locationX, int locationY, int speedX, int speedY):AbstractProp
+}
+
+class BulletFactory {
+    + createProp(int locationX, int locationY, int speedX, int speedY):AbstractProp
+}
+
+class BombFactory {
+    + createProp(int locationX, int locationY, int speedX, int speedY):AbstractProp
+}
+
+class BloodFactory {
+    + createProp(int locationX, int locationY, int speedX, int speedY):AbstractProp
+}
+
+BulletFactory ..> Bullet
+BombFactory ..> Bomb
+BloodFactory ..> Blood
+
+@enduml
