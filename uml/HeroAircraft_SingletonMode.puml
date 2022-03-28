@@ -12,6 +12,7 @@ class HeroAircraft {
     - shootNum:int
     - power:int
     - direction:int
+    - heroAircraft:HeroAircraft
     - HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
     + getHeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp):HeroAircraft
     + forward():void
