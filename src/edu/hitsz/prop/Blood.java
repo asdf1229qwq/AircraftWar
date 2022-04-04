@@ -1,5 +1,8 @@
 package edu.hitsz.prop;
 
+/**
+ * @author ding
+ */
 public class Blood extends AbstractProp {
 
 //    private int health = 20;

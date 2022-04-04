@@ -17,7 +17,7 @@ class HeroAircraft {
     + getHeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp):HeroAircraft
     + forward():void
     + shoot():List<BaseBullet>
-    + getShootNumber() : int
+    + getShootNumber() : inttT
     + increaseHp(int increase) : void
     + increaseBullet(int bulletNumber) : void
 }

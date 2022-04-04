@@ -12,11 +12,15 @@ import java.util.List;
  */
 public class HeroAircraft extends AbstractAircraft {
 
-    /** 攻击方式 */
-    private int shootNum = 1;     //子弹一次发射数量
-    private int power = 30;       //子弹伤害
-    private int direction = -1;  //子弹射击方向 (向上发射：1，向下发射：-1)
-
+    /**
+     * 攻击方式
+     * 子弹一次发射数量
+     * 子弹伤害
+     * 子弹射击方向 (向上发射：1，向下发射：-1)
+     */
+    private int shootNum = 1;
+    private int power = 30;
+    private int direction = -1;
     /**
      * @param locationX 英雄机位置x坐标
      * @param locationY 英雄机位置y坐标
@@ -67,18 +71,19 @@ public class HeroAircraft extends AbstractAircraft {
         return res;
     }
 
-    // 血量道具
+    /**
+     * 血量道具
+     */
     public void increaseHp(int increase) {
         hp += increase;
         if(hp > maxHp) {
             hp = maxHp;
         }
     }
-
-    // 火力道具
-    public void increaseBullet(int bulletNumber) {
-        shootNum += bulletNumber;
-    }
+    /**
+     * 火力道具
+     */
+    public void increaseBullet(int bulletNumber) {shootNum += bulletNumber;}
 
     public int getShootNum() {
         return shootNum;

@@ -3,9 +3,12 @@ package edu.hitsz.application;
 import edu.hitsz.aircraft.*;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
-import edu.hitsz.enemy_factory.EliteEnemyFactory;
-import edu.hitsz.enemy_factory.MobEnemyFactory;
+import edu.hitsz.enemyfactory.EliteEnemyFactory;
+import edu.hitsz.enemyfactory.MobEnemyFactory;
 import edu.hitsz.prop.*;
+import edu.hitsz.propfactory.BloodFactory;
+import edu.hitsz.propfactory.BombFactory;
+import edu.hitsz.propfactory.BulletFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,7 +68,15 @@ public class Game extends JPanel {
         props = new LinkedList<>();
 
         //Scheduled 线程池，用于定时任务调度
-        executorService = new ScheduledThreadPoolExecutor(1);
+        ThreadFactory gameThread = new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable r) {
+                Thread t = new Thread(r);
+                t.setName("game thread");
+                return t;
+            }
+        };
+        executorService = new ScheduledThreadPoolExecutor(1, gameThread);
 
         //启动英雄机鼠标监听
         new HeroController(this, heroAircraft);
@@ -90,7 +101,8 @@ public class Game extends JPanel {
                     // 普通敌机产生的概率为80%，精英敌机产生的概率为20%
                     // 普通敌机血量为30，不能发射子弹
                     // 精英敌机血量为60，能发射子弹
-                    switch((int)(Math.random()*5)) {
+                    Random random = new Random();
+                    switch(random.nextInt(5)) {
                         case 0: case 1: case 2: case 3: {
                             enemyAircrafts.add(new MobEnemyFactory().createEnemy(
                                     (int) (Math.random() * (Main.WINDOW_WIDTH - ImageManager.MOB_ENEMY_IMAGE.getWidth()))*1,
@@ -111,8 +123,9 @@ public class Game extends JPanel {
                             ));
                             break;
                         }
-//                        default:
-//                            break;
+                        default: {
+                            break;
+                        }
                     }
 
                 }
@@ -220,7 +233,6 @@ public class Game extends JPanel {
                 bullet.vanish();
             }
         }
-
         // 英雄子弹攻击敌机
         for (BaseBullet bullet : heroBullets) {
             if (bullet.notValid()) {
@@ -245,29 +257,33 @@ public class Game extends JPanel {
                              * 击落精英机有50%概率生成道具
                              * 同屏最多3个道具
                              */
+                            Random random = new Random();
                             if(props.size() < propMaxNumber) {
-                                switch ((int)(Math.random()*2)) {
+                                    switch (random.nextInt(2)) {
                                     case 0: {
-                                        switch ((int)(Math.random()*3)) {
+                                        switch (random.nextInt(3)) {
                                             case 0: {
-                                                props.add(new Blood((int) (Math.random() * (Main.WINDOW_WIDTH - ImageManager.PROP_BLOOD_IMAGE.getWidth())) * 1,
+                                                props.add(new BloodFactory().createProp((int) (Math.random() * (Main.WINDOW_WIDTH - ImageManager.PROP_BLOOD_IMAGE.getWidth())) * 1,
                                                         (int) ((2 + Math.random()) * Main.WINDOW_HEIGHT * 0.2) * 1,
                                                         0,
                                                         2));
                                                 break;
                                             }
                                             case 1: {
-                                                props.add(new Bomb((int) (Math.random() * (Main.WINDOW_WIDTH - ImageManager.PROP_BLOOD_IMAGE.getWidth())) * 1,
+                                                props.add(new BombFactory().createProp((int) (Math.random() * (Main.WINDOW_WIDTH - ImageManager.PROP_BLOOD_IMAGE.getWidth())) * 1,
                                                         (int) ((2 + Math.random()) * Main.WINDOW_HEIGHT * 0.2) * 1,
                                                         0,
                                                         2));
                                                 break;
                                             }
                                             case 2: {
-                                                props.add(new Bullet((int) (Math.random() * (Main.WINDOW_WIDTH - ImageManager.PROP_BLOOD_IMAGE.getWidth())) * 1,
+                                                props.add(new BulletFactory().createProp((int) (Math.random() * (Main.WINDOW_WIDTH - ImageManager.PROP_BLOOD_IMAGE.getWidth())) * 1,
                                                         (int) ((2 + Math.random()) * Main.WINDOW_HEIGHT * 0.2) * 1,
                                                         0,
                                                         2));
+                                                break;
+                                            }
+                                            default: {
                                                 break;
                                             }
                                         }

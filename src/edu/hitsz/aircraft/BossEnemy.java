@@ -7,11 +7,23 @@ import edu.hitsz.bullet.EnemyBullet;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * BOSS敌机
+ * 可攻击
+ *
+ * @author ding
+ */
+
 public class BossEnemy extends AbstractAircraft{
-    /** 攻击方式 */
-    private int shootNum = 1;     //子弹一次发射数量
-    private int power = 60;       //子弹伤害
-    private int direction = 1;  //子弹射击方向 (向上发射：1，向下发射：-1)
+    /**
+     * 攻击方式
+     * 子弹一次发射数量
+     * 子弹伤害
+     * 子弹射击方向 (向上发射：1，向下发射：-1)
+     */
+    private int shootNum = 1;
+    private int power = 60;
+    private int direction = 1;
 
     public BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp);

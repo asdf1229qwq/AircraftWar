@@ -11,14 +11,18 @@ import java.util.List;
  * 精英敌机
  * 可射击
  *
- * @author hitsz
+ * @author ding
  */
 public class EliteEnemy extends AbstractAircraft {
-
-    /** 攻击方式 */
-    private int shootNum = 1;     //子弹一次发射数量
-    private int power = 25;       //子弹伤害
-    private int direction = 1;  //子弹射击方向 (向上发射：1，向下发射：-1)
+    /**
+     * 攻击方式
+     * 子弹一次发射数量
+     * 子弹伤害
+     * 子弹射击方向 (向上发射：1，向下发射：-1)
+     */
+    private int shootNum = 1;
+    private int power = 25;
+    private int direction = 1;
 
     public EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp);
@@ -47,5 +51,9 @@ public class EliteEnemy extends AbstractAircraft {
             res.add(baseBullet);
         }
         return res;
+    }
+
+    public int getSpeedX() {
+        return speedX;
     }
 }
