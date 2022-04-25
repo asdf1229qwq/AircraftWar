@@ -1,18 +1,26 @@
 package edu.hitsz.application;
 
+import edu.hitsz.DAO.Player;
+import edu.hitsz.DAO.PlayerDAO;
+import edu.hitsz.DAO.PlayerDAOlmpl;
 import edu.hitsz.aircraft.*;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
+import edu.hitsz.enemyfactory.BossEnemyFactory;
 import edu.hitsz.enemyfactory.EliteEnemyFactory;
 import edu.hitsz.enemyfactory.MobEnemyFactory;
 import edu.hitsz.prop.*;
 import edu.hitsz.propfactory.BloodFactory;
 import edu.hitsz.propfactory.BombFactory;
 import edu.hitsz.propfactory.BulletFactory;
+import edu.hitsz.shootstrategy.ScatteredShoot;
+import edu.hitsz.shootstrategy.ShootContext;
+import edu.hitsz.shootstrategy.StraightShoot;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.*;
@@ -45,6 +53,9 @@ public class Game extends JPanel {
     private int enemyMaxNumber = 5;
     private int propMaxNumber = 5;
 
+    private int bossScoreThreshold = 300;
+    private boolean bossExistence = false;
+
     private boolean gameOverFlag = false;
     private int score = 0;
     private int time = 0;
@@ -60,7 +71,7 @@ public class Game extends JPanel {
         heroAircraft = HeroAircraft.getHeroAircraft(
                 Main.WINDOW_WIDTH / 2,
                 Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight() ,
-                0, 0, 100);
+                0, 0, 500);
 
         enemyAircrafts = new LinkedList<>();
         heroBullets = new LinkedList<>();
@@ -127,7 +138,17 @@ public class Game extends JPanel {
                             break;
                         }
                     }
-
+//                    System.out.println("BOSS = " + bossExistence);
+                    if(score > 0 && score % bossScoreThreshold == 0 && bossExistence == false) {
+                        bossExistence = true;
+                        enemyAircrafts.add(new BossEnemyFactory().createEnemy(
+                                (int) (Math.random() * (Main.WINDOW_WIDTH - ImageManager.BOSS_ENEMY_IMAGE.getWidth()))*1,
+                                (int) (Math.random() * Main.WINDOW_HEIGHT * 0.2)*1,
+                                2,
+                                0,
+                                300
+                        ));
+                    }
                 }
                 // 飞机射出子弹
                 shootAction();
@@ -157,6 +178,11 @@ public class Game extends JPanel {
                 executorService.shutdown();
                 gameOverFlag = true;
                 System.out.println("Game Over!");
+                PlayerDAO playerDAO = new PlayerDAOlmpl();
+                /****/
+                String date = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss").format(new Date());
+                playerDAO.update(new Player("tom", score, date));
+                playerDAO.showScoreBoard();
             }
 
         };
@@ -187,10 +213,20 @@ public class Game extends JPanel {
     private void shootAction() {
         // 敌机射击
         for (AbstractAircraft enemyAircraft : enemyAircrafts) {
-            enemyBullets.addAll(enemyAircraft.shoot());
+            if(enemyAircraft instanceof EliteEnemy) {
+                enemyBullets.addAll(new ShootContext(new StraightShoot()).executeStrategy(enemyAircraft));
+            }
+            else if(enemyAircraft instanceof BossEnemy) {
+                enemyBullets.addAll(new ShootContext(new ScatteredShoot()).executeStrategy(enemyAircraft));
+            }
         }
         // 英雄射击
-        heroBullets.addAll(heroAircraft.shoot());
+        if(heroAircraft.getShootNum() == 1) {
+            heroBullets.addAll(new ShootContext(new StraightShoot()).executeStrategy(heroAircraft));
+        }
+        else {
+            heroBullets.addAll(new ShootContext(new ScatteredShoot()).executeStrategy(heroAircraft));
+        }
     }
 
     private void bulletsMoveAction() {
@@ -296,6 +332,10 @@ public class Game extends JPanel {
                             }
 
                         }
+                        else if(enemyAircraft instanceof BossEnemy) {
+                            score += 50;
+                            bossExistence = false;
+                        }
                         else {
                             score += 10;
                         }
@@ -326,6 +366,7 @@ public class Game extends JPanel {
                 }
                 // 炸弹道具
                 else if(prop instanceof Bomb) {
+                    bossExistence = false;
                     for(AbstractAircraft enemyAircraft : enemyAircrafts) {
                         enemyAircraft.vanish();
                     }

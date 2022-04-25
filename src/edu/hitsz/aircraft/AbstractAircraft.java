@@ -17,6 +17,9 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
      */
     protected int maxHp;
     protected int hp;
+    protected int power = 0;
+    protected int direction = 0;
+    protected int shootNum = 0;
 
     public AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY);
@@ -27,7 +30,7 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
     public void decreaseHp(int decrease){
         hp -= decrease;
         if(hp <= 0){
-            hp=0;
+            hp = 0;
             vanish();
         }
     }
@@ -36,6 +39,21 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
         return hp;
     }
 
+    public int getDirection() { return direction; }
+
+    public int getShootNum() { return shootNum; }
+
+    public int getSpeedX() {
+        return speedX;
+    }
+
+    public int getSpeedY() {
+        return speedY;
+    }
+
+    public int getPower() {
+        return power;
+    }
 
     /**
      * 飞机射击方法，可射击对象必须实现
@@ -43,7 +61,7 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
      *  可射击对象需实现，返回子弹
      *  非可射击对象空实现，返回null
      */
-    public abstract List<BaseBullet> shoot();
+//    public abstract List<BaseBullet> shoot();
 
 }
 

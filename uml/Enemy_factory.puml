@@ -21,7 +21,7 @@ class MobEnemy {
     + shoot():List<Bullet>
 }
 
-class EliteEnemy{
+class EliteEnemy {
       - int shootNum
       - int power
       - int direction
@@ -30,7 +30,7 @@ class EliteEnemy{
       + shoot():List<Bullet>
 }
 
-class BossEnemy{
+class BossEnemy {
       - int shootNum
       - int power
       - int direction

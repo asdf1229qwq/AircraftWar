@@ -16,6 +16,7 @@ public class MobEnemy extends AbstractAircraft {
 
     public MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp);
+        shootNum = 0;
     }
 
     @Override
@@ -27,9 +28,9 @@ public class MobEnemy extends AbstractAircraft {
         }
     }
 
-    @Override
-    public List<BaseBullet> shoot() {
-        return new LinkedList<>();
-    }
+//    @Override
+//    public List<BaseBullet> shoot() {
+//        return new LinkedList<>();
+//    }
 
 }

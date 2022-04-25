@@ -1,0 +1,38 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface PlayerDAO {
+    + getAll(): List<Player>
+'    + getOne(Type1 attr1): ValueObject
+    + update(Player player): void
+    + delete(Player player): void
+}
+
+PlayerDAO <|... PlayerDAOlmpl
+
+class PlayerDAOlmpl {
+    - PlayerList: List<Player>
+
+    + PlayerDAOlmpl()
+    + getAll(): List<Player>
+'    + getOne(Type1 attr1): Player
+    + update(Player player): void
+    + delete(Player player): void
+}
+
+PlayerDAOlmpl <--- Player
+
+class Player {
+    - name: String
+    - score: int
+    - date: String
+
+    + Player(String name, int score, String date)
+    + getName(): String
+    + setName(String name): void
+    + getScore(): int
+    + setScore(int score): void
+}
+
+
+@enduml

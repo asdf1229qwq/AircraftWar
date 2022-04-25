@@ -13,7 +13,6 @@ public class Main {
     public static final int WINDOW_HEIGHT = 768;
 
     public static void main(String[] args) {
-
         System.out.println("Hello Aircraft War");
 
         // 获得屏幕的分辨率，初始化 Frame
