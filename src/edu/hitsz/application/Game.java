@@ -42,7 +42,7 @@ public class Game extends JPanel {
      * 音乐线程
      */
     private final MusicThread musicThread = new MusicThread("src/videos/bgm.wav");
-    private final MusicThread bossMusicThread = new MusicThread("src/videos/bgm_boss.wav");
+    private MusicThread bossMusicThread = new MusicThread("src/videos/bgm_boss.wav");
     public static boolean musicState = false;
     /**
      * 时间间隔(ms)，控制刷新频率
@@ -58,7 +58,7 @@ public class Game extends JPanel {
     private int enemyMaxNumber = 5;
     private int propMaxNumber = 5;
 
-    private int bossScoreThreshold = 100;
+    private int bossScoreThreshold = 300;
     private boolean bossExistence = false;
 
     private boolean gameOverFlag = false;
@@ -162,6 +162,7 @@ public class Game extends JPanel {
                 if(nowScore >= bossScoreThreshold && bossExistence == false) {
                     nowScore -= bossScoreThreshold;
                     if(musicState) {
+                        bossMusicThread = new MusicThread("src/videos/bgm_boss.wav");
                         bossMusicThread.start();
                         bossMusicThread.Loop(true);
                     }
@@ -197,8 +198,8 @@ public class Game extends JPanel {
             repaint();
 
             if(!bossExistence) {
-                //
-                bossMusicThread.Loop(false);
+                bossMusicThread.pause();
+//                bossMusicThread.Loop(false);
             }
 
             // 游戏结束检查
@@ -378,6 +379,7 @@ public class Game extends JPanel {
                             nowScore += 50;
                             score += 50;
                             bossExistence = false;
+                            bossMusicThread.pause();
                         }
                         else {
                             nowScore += 10;
@@ -416,6 +418,7 @@ public class Game extends JPanel {
                         new MusicThread("src/videos/bomb_explosion.wav").start();
                     }
                     bossExistence = false;
+                    bossMusicThread.pause();
                     for(AbstractAircraft enemyAircraft : enemyAircrafts) {
                         enemyAircraft.vanish();
                     }

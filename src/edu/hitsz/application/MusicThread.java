@@ -24,7 +24,7 @@ public class MusicThread extends Thread {
     private byte[] samples;
 
     private boolean isLoop = false;
-    private static boolean played = true;
+    private boolean played = true;
 
     public MusicThread(String filename) {
         //初始化filename
@@ -83,7 +83,7 @@ public class MusicThread extends Thread {
         dataLine.start();
         try {
             int numBytesRead = 0;
-            while (numBytesRead != -1) {
+            while (played && numBytesRead != -1) {
 				//从音频流读取指定的最大数量的数据字节，并将其放入缓冲区中
                 numBytesRead =
                         source.read(buffer, 0, buffer.length);
@@ -108,6 +108,10 @@ public class MusicThread extends Thread {
             InputStream stream = new ByteArrayInputStream(samples);
             play(stream);
         }while(isLoop);
+    }
+
+    public void pause() {
+        played = false;
     }
 }
 
