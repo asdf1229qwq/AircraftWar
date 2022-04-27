@@ -1,52 +1,48 @@
-package Swing;
+package edu.hitsz.swing;
+
+import edu.hitsz.DAO.Player;
+import edu.hitsz.DAO.PlayerDAO;
+import edu.hitsz.DAO.PlayerDAOlmpl;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.util.LinkedList;
+import java.util.List;
+
+import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
+import static javax.swing.JOptionPane.YES_NO_OPTION;
 
 public class EndPanel {
     private JPanel endPanel;
     private JTable scoreTable;
     private JScrollPane tableScrollPane;
     private JButton deleteButton;
-    private File file = new File("src/edu/hitsz/DAO/Player.txt");
     private int maxListNum = 20;
+    private List<Player> PlayerList = new LinkedList<>();
 
     public EndPanel() {
         String[] columnName = {"rank", "name", "score", "date"};
         String[][] tableData = new String[maxListNum][4];
 
-        FileReader fr = null;
-        try {
-            fr = new FileReader(this.file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-//            throw new RuntimeException(e);
-        }
-        BufferedReader br = new BufferedReader(fr);
 
-        String line = "";
-        String[] attr;
 
-        try {
-            int rk = 0;
-            while((line = br.readLine()) != null) {
-                if(rk >= maxListNum) {
-                    break;
-                }
-                attr = line.split(" ");
-                tableData[rk][0] = String.valueOf(rk + 1);
-                tableData[rk][1] = attr[0];
-                tableData[rk][2] = attr[1];
-                tableData[rk][3] = attr[2];
-                rk++;
+        PlayerDAO playerDAO = new PlayerDAOlmpl();
+        PlayerList = playerDAO.getAll();
+
+        int rk = 0;
+        for(Player player1 : PlayerList) {
+//            System.out.println("~~~~");
+            if(rk >= 20) {
+                break;
             }
-            br.close();
-            fr.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+            tableData[rk][0] = String.valueOf(rk + 1);
+            tableData[rk][1] = player1.getName();
+            tableData[rk][2] = String.valueOf(player1.getScore());
+            tableData[rk][3] = player1.getDate();
+            rk++;
         }
 
         DefaultTableModel model = new DefaultTableModel(tableData, columnName) {
@@ -63,10 +59,17 @@ public class EndPanel {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int opt = JOptionPane.showConfirmDialog(null, "是否确定删除？",
+                        "选择",YES_NO_OPTION); //返回值为0或1
                 int row = scoreTable.getSelectedRow();
                 System.out.println(row);
-                if(row != -1) {
-                    model.removeRow(row);
+                System.out.println(opt);
+                if(opt == 0) {
+                    if(row != -1) {
+                        model.removeRow(row);
+                        playerDAO.delete(row);
+                        playerDAO.saveFile();
+                    }
                 }
             }
         });
@@ -78,5 +81,9 @@ public class EndPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+    }
+
+    public JPanel getMainPanel() {
+        return endPanel;
     }
 }

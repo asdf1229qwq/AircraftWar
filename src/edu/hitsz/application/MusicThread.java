@@ -23,11 +23,19 @@ public class MusicThread extends Thread {
     private AudioFormat audioFormat;
     private byte[] samples;
 
+    private boolean isLoop = false;
+    private static boolean played = true;
+
     public MusicThread(String filename) {
         //初始化filename
         this.filename = filename;
         reverseMusic();
     }
+
+    public void Loop(boolean state) {
+        isLoop = state;
+    }
+
 
     public void reverseMusic() {
         try {
@@ -61,7 +69,7 @@ public class MusicThread extends Thread {
     public void play(InputStream source) {
         int size = (int) (audioFormat.getFrameSize() * audioFormat.getSampleRate());
         byte[] buffer = new byte[size];
-        //源数据行SoureDataLine是可以写入数据的数据行
+        //源数据行SourceDataLine是可以写入数据的数据行
         SourceDataLine dataLine = null;
         //获取受数据行支持的音频格式DataLine.info
         Info info = new Info(SourceDataLine.class, audioFormat);
@@ -96,8 +104,10 @@ public class MusicThread extends Thread {
 
     @Override
     public void run() {
-        InputStream stream = new ByteArrayInputStream(samples);
-        play(stream);
+        do {
+            InputStream stream = new ByteArrayInputStream(samples);
+            play(stream);
+        }while(isLoop);
     }
 }
 
