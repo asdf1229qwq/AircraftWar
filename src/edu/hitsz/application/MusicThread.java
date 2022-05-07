@@ -1,5 +1,7 @@
 package edu.hitsz.application;
 
+import edu.hitsz.application.game.Game;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -9,7 +11,6 @@ import java.io.InputStream;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -104,10 +105,13 @@ public class MusicThread extends Thread {
 
     @Override
     public void run() {
-        do {
-            InputStream stream = new ByteArrayInputStream(samples);
-            play(stream);
-        }while(isLoop);
+        if(Game.musicState) {
+            do {
+                InputStream stream = new ByteArrayInputStream(samples);
+                play(stream);
+            }while(isLoop);
+        }
+
     }
 
     public void pause() {

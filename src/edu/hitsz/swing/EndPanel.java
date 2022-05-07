@@ -68,7 +68,7 @@ public class EndPanel {
                     if(row != -1) {
                         model.removeRow(row);
                         playerDAO.delete(row);
-                        playerDAO.saveFile();
+                        playerDAO.saveFile(ChangePanel.mode);
                     }
                 }
             }

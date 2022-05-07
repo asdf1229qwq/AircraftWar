@@ -1,0 +1,40 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class ObserverPatternDemo {
+}
+
+ObserverPatternDemo --> BombPublisher
+
+class BombPublisher {
+    - List<AbstractAircraft> enemyAircrafts;
+    + addEnemyAircraft(AbstractAircraft enemyAircraft):void
+    + removeEnemyAircraft(AbstractAircraft enemyAircraft):void
+    + removeAll():void
+}
+
+BombPublisher o--> EnemyAircraft
+
+interface EnemyAircraft {
+    update():void
+}
+
+class MobEnemy {
+    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + forward():void
+    + shoot():List<Bullet>
+}
+
+class EliteEnemy {
+      - int shootNum
+      - int power
+      - int direction
+      + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+      + forward():void
+      + shoot():List<Bullet>
+}
+
+EnemyAircraft <|.. EliteEnemy
+EnemyAircraft <|.. MobEnemy
+
+@enduml

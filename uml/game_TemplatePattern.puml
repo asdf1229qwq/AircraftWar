@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+abstract class Game {
+    + templateMethod():void
+    + setDifficulty():void
+}
+
+Game <|-- EasyGame
+Game <|-- MediumGame
+Game <|-- HardGame
+
+class  EasyGame{
+    + setDifficulty():void
+}
+
+class MediumGame {
+    + setDifficulty():void
+}
+
+class HardGame {
+    + setDifficulty():void
+}
+
+@enduml

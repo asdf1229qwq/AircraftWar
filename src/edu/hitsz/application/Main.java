@@ -3,6 +3,7 @@ package edu.hitsz.application;
 import edu.hitsz.DAO.Player;
 import edu.hitsz.DAO.PlayerDAO;
 import edu.hitsz.DAO.PlayerDAOlmpl;
+import edu.hitsz.application.game.Game;
 import edu.hitsz.swing.ChangePanel;
 import edu.hitsz.swing.EndPanel;
 
@@ -10,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static edu.hitsz.swing.ChangePanel.mode;
 
 /**
  * 程序入口
@@ -53,11 +56,14 @@ public class Main {
             }
         }
 
+
+
         frame.remove(newMainPanel);
 
+        Game game = newFrame.getGame();
 
         // 游戏界面
-        Game game = new Game();
+
         frame.setContentPane(game);
         frame.setVisible(true);
         game.action();
@@ -87,7 +93,7 @@ public class Main {
         PlayerDAO playerDAO = new PlayerDAOlmpl();
         Player nowPlayer = new Player(name, score, date);
         playerDAO.update(nowPlayer);
-        playerDAO.saveFile();
+        playerDAO.saveFile(ChangePanel.mode);
 
 //        System.out.println(score);
 //        System.out.println(date);

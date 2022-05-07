@@ -1,8 +1,11 @@
 package edu.hitsz.swing;
 
-import edu.hitsz.application.Game;
+import edu.hitsz.application.game.EasyGame;
+import edu.hitsz.application.game.Game;
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
+import edu.hitsz.application.game.HardGame;
+import edu.hitsz.application.game.MediumGame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,10 +18,21 @@ public class ChangePanel {
     private JButton EasyButton;
     private JButton NormalButton;
     private JButton HardButton;
-    private JComboBox MusicComboBox;
-    private JLabel music;
     private JPanel changePanel;
+    private JLabel music;
     private JCheckBox MusicCheckBox;
+    public static int mode;
+
+    private Game game;
+
+    private EndPanel endPanel;
+
+    public Game getGame() {
+        return this.game;
+    }
+    public EndPanel getEndPanel() {
+        return endPanel;
+    }
 
     public ChangePanel() {
         EasyButton.addActionListener(new ActionListener() {
@@ -30,6 +44,8 @@ public class ChangePanel {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+                game = new EasyGame();
+                mode = 1;
                 changePanel.setVisible(false);
                 synchronized (Main.MAIN_LOCK){
                     // 选定难度，通知主线程结束等待
@@ -46,6 +62,8 @@ public class ChangePanel {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+                game = new MediumGame();
+                mode = 2;
                 changePanel.setVisible(false);
                 synchronized (Main.MAIN_LOCK){
                     // 选定难度，通知主线程结束等待
@@ -62,6 +80,8 @@ public class ChangePanel {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+                game = new HardGame();
+                mode = 3;
                 changePanel.setVisible(false);
                 synchronized (Main.MAIN_LOCK){
                     // 选定难度，通知主线程结束等待

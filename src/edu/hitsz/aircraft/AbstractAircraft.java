@@ -1,6 +1,6 @@
 package edu.hitsz.aircraft;
 
-import edu.hitsz.bullet.BaseBullet;
+import edu.hitsz.application.game.Game;
 import edu.hitsz.basic.AbstractFlyingObject;
 
 import java.util.List;
@@ -55,14 +55,9 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
         return power;
     }
 
-    /**
-     * 飞机射击方法，可射击对象必须实现
-     * @return
-     *  可射击对象需实现，返回子弹
-     *  非可射击对象空实现，返回null
-     */
-//    public abstract List<BaseBullet> shoot();
+    public abstract void update(Game game);
 
+    public abstract void fallProp(List props);
 }
 
 

@@ -17,13 +17,10 @@ public class BulletThread extends Thread{
     public void run() {
         heroAircraft.increaseBullet(2);
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10000);
         } catch (InterruptedException ex) {
             throw new RuntimeException(ex);
         }
         heroAircraft.increaseBullet(-2);
     }
-
-
-
 }

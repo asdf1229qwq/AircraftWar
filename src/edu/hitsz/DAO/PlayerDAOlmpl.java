@@ -1,15 +1,19 @@
 package edu.hitsz.DAO;
 
+import edu.hitsz.swing.ChangePanel;
+
 import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 
 public class PlayerDAOlmpl implements PlayerDAO{
     private List<Player> PlayerList = new LinkedList<>();
-    private File file = new File("src/edu/hitsz/DAO/Player.txt");
-//    private File file = new File("Player.txt");
+    private File file1 = new File("src/edu/hitsz/DAO/EasyGame.txt");
+    private File file2 = new File("src/edu/hitsz/DAO/MediumGame.txt");
+    private File file3 = new File("src/edu/hitsz/DAO/HardGame.txt");
+    private File file;
     public PlayerDAOlmpl(){
-        loadFile();
+        loadFile(ChangePanel.mode);
     }
     @Override
     public List<Player> getAll() {
@@ -25,9 +29,21 @@ public class PlayerDAOlmpl implements PlayerDAO{
         PlayerList.remove(pos);
     }
     @Override
-    public void loadFile() {
+    public void loadFile(int mode) {
         FileReader fr = null;
         try {
+            if(mode == 1) {
+                file = file1;
+//                fr = new FileReader(this.file1);
+            }
+            else if(mode == 2) {
+                file = file2;
+//                fr = new FileReader(this.file2);
+            }
+            else {
+                file = file3;
+//                fr = new FileReader(this.file3);
+            }
             fr = new FileReader(this.file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -50,9 +66,22 @@ public class PlayerDAOlmpl implements PlayerDAO{
         }
     }
     @Override
-    public void saveFile() {
+    public void saveFile(int mode) {
+
         FileWriter fw = null;
         try {
+            if(mode == 1) {
+                file = file1;
+//                fr = new FileReader(this.file1);
+            }
+            else if(mode == 2) {
+                file = file2;
+//                fr = new FileReader(this.file2);
+            }
+            else {
+                file = file3;
+//                fr = new FileReader(this.file3);
+            }
             fw = new FileWriter(this.file);
         } catch (IOException e) {
             e.printStackTrace();
